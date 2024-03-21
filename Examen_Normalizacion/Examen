@@ -1,0 +1,60 @@
+CREATE DATABASE UNIVERSIDAD;
+GO
+
+USE UNIVERSIDAD;
+
+go
+
+CREATE TABLE ALUMNO (
+	Id_Alumno INT PRIMARY KEY,
+	Nombre VARCHAR(50),
+	Apellido VARCHAR(50),
+	Id_Carrera INT FOREIGN KEY REFERENCES CARRERA(Id_Carrera)
+);
+GO
+
+CREATE TABLE ASIGNATURA_(
+	NRC INT PRIMARY KEY,
+	Asignatura VARCHAR(50)
+);
+GO
+
+CREATE TABLE ALUMNO_ASIGNATURA(
+	Id INT IDENTITY PRIMARY KEY,
+	Id_Alumno INT,
+	Id_NRC INT,
+	FOREIGN KEY (Id_Alumno) REFERENCES ALUMNO(Id_Alumno),
+	FOREIGN KEY (Id_NRC) REFERENCES ASIGNATURA_(NRC)
+);
+GO
+
+
+CREATE TABLE CARRERA(
+	Id_Carrera INT PRIMARY KEY,
+	Nom VARCHAR(50)
+);
+GO
+
+
+INSERT INTO ALUMNO (Id_Alumno, Nombre, Apellido, Id_Carrera)
+VALUES
+(1, 'Daniela', 'Bohorquez', 1),
+(2, 'Juan', 'Hernandez', 1),
+(3, 'Juan', 'David', 1);
+
+GO
+
+INSERT INTO ASIGNATURA_ (NRC, Asignatura)
+VALUES
+(123, 'Bases de Datos'),
+(234, 'Programacion Web'),
+(237, 'Calculo');
+
+GO
+
+INSERT INTO CARRERA (Id_Carrera, Nom)
+VALUES
+(1, 'Informatica'),
+(2, 'Derecho');
+
+GO

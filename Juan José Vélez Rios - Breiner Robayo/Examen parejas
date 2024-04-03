@@ -1,0 +1,274 @@
+USE RESTAURANT
+GO
+
+CREATE TABLE Restaurante(
+	Id_Restaurante INT PRIMARY KEY,
+	Nombre VARCHAR(100),
+	Direccion VARCHAR(50),
+	Pais VARCHAR (50),
+	Ciudad VARCHAR(50),
+	Telefono VARCHAR(15),
+	Horario_apertura TIME,
+	Horario_cierran TIME,
+	Imagen IMAGE
+);
+GO
+
+CREATE TABLE Cocina(
+	Id_Cocina INT PRIMARY KEY,
+    Nombre VARCHAR(50),
+    Descripción VARCHAR(230)
+);
+GO
+
+CREATE TABLE Menus(
+	Id_Menu INT PRIMARY KEY,
+    Id_Restaurante INT,
+    Id_Cocina INT,
+    FOREIGN KEY (Id_Restaurante) REFERENCES Restaurante(Id_Restaurante),
+    FOREIGN KEY (Id_Cocina) REFERENCES Cocina(Id_Cocina)
+);
+GO
+
+CREATE TABLE Comidas(
+	Id_Comidas INT PRIMARY KEY,
+    Nombre VARCHAR(50),
+    Descripción VARCHAR(200),
+    Precio DECIMAL(10,2),
+    Id_Menu INT,
+    FOREIGN KEY (Id_Menu) REFERENCES Menus(Id_Menu)
+);
+GO
+
+CREATE TABLE Clientes(
+	Id_Cliente INT PRIMARY KEY,
+    Nombre VARCHAR(50),
+    Direccion VARCHAR(50),
+    Ciudad VARCHAR(50),
+    Pais VARCHAR(50),
+    Telefono VARCHAR(15),
+    Correo_electronico VARCHAR(100)
+);
+GO
+
+CREATE TABLE Pedidos(
+	Id_Pedido INT PRIMARY KEY,
+    Fecha DATE,
+    Hora TIME,
+    Tipo VARCHAR(50),
+    Estado VARCHAR(50),
+    Precio_t DECIMAL(10,2),
+    Id_Restaurante INT,
+    Id_Cliente INT,
+    FOREIGN KEY (Id_Restaurante) REFERENCES Restaurante(Id_Restaurante),
+    FOREIGN KEY (Id_Cliente) REFERENCES Clientes(Id_Cliente)
+);
+GO
+
+CREATE TABLE Reservaciones(
+	Id_Reservacion INT PRIMARY KEY,
+    Fecha DATE,
+    Hora TIME,
+    Numero_Personas INT,
+    Id_Restaurante INT,
+    Id_Cliente INT,
+    FOREIGN KEY (Id_Restaurante) REFERENCES Restaurante(id_Restaurante),
+    FOREIGN KEY (Id_Cliente) REFERENCES Clientes(Id_Cliente)
+);
+GO
+
+INSERT INTO Restaurante (Id_Restaurante, Nombre, Direccion, Pais, Ciudad, Telefono, Horario_apertura, Horario_cierran, Imagen) 
+VALUES
+	(1, 'Papas Pizzeria', '132 Veracruz', 'Mexico', 'Ciudad de Mexico', '555-123-4567', '10:00 AM', '9:00 PM', 'pizza.jpg'),
+    (2, 'Palacio del Chino', '456 China Town', 'China', 'Pekín', '555-987-6543', '11:00 AM', '10:00 PM', 'sushi.jpg'),
+    (3, 'Café Frances', '789 Av Víctor Hugo', 'Francia', 'Paris', '555-555-5555', '8:00 AM', '7:00 PM', 'cafe.jpg'),
+    (4, 'Taquitos', '567 Av Steels', 'Estados Unidos', 'Los Angeles', '555-111-2222', '12:00 PM', '10:30 PM', 'taco.jpg'),
+    (5, 'Conejos Criollos', '890 Calle Muerta', 'Perú', 'Cusco', '555-333-4444', '11:00 AM', '9:30 PM', 'Fritos.jpg'),
+    (6, 'Heladinis', '834 Valentino', 'Italia', 'Roma', '555-777-8888', '2:00 PM', '11:00 PM', 'gelato.jpg'),
+    (7, 'Burgeria', '345 Av Beach', 'Estados Unidos', 'Florida', '555-444-5555', '11:30 AM', '10:00 PM', 'burger.jpg');  
+GO
+
+INSERT INTO Cocina (Id_Cocina, Nombre, Descripción)
+VALUES
+    (1, 'Cocina Mexicana', 'Pizzas en todas sus presentaciones con ese toque picante de nuestro querido México.'),
+    (2, 'Cocina China', 'Fideos chinos, Chop suey, Lumpia, Pato laqueado a la pekinesa son solo algunos de nuestros platos estrella.'),
+    (3, 'Cocina Francesa', 'Café, croissant y un sin numero de deliciosos panes con hermosas vistas hacia La Torre Eifel.'),
+    (4, 'Cocina Estadounidense', 'Un poco de la sazón méxicana traida a los estados unidos, burritos, tacos y más.'),
+    (5, 'Cocina Peruana', 'Las comidas tipicas de Perú las encontraras aquí.'),
+	(6, 'Cocina Italiana', 'Encontraras una granvariedad de helados gourmet aquí, en Heladinis.'),
+	(7, 'Cocina Estadounidense','Te ofrecemos todo tipo de comidas rápidas, desde papas fritas, hasta las mejores hamburguesas que vas a probar.');
+
+GO
+
+INSERT INTO Menus(Id_Menu, Id_Restaurante,Id_Cocina)
+VALUES
+	(1, 1, 1),
+	(2, 2, 2),
+	(3, 3, 3),
+	(4, 4, 4),
+	(5, 5, 5),
+	(6, 6, 6),
+	(7, 7, 7);
+	GO
+	
+
+INSERT INTO Comidas(Id_Comidas, Nombre, Descripción,Precio,Id_Menu)
+VALUES
+	(1,'Pizza', 'Ricas pizzas con los mejores ingredientes', $200, 1),
+	(2,'Fideos chinos, Pato laqueado a la pekinesa', 'Son solo algunos de nuestros platos estrella.', $114.09, 2),
+	(3,'Café, Parva', 'Café, croissant y un sin numero de deliciosos panes con hermosas vistas hacia La Torre Eifel', $10.90, 3),
+	(4,'Tacos', 'Un poco de la sazón méxicana traida a los estados unidos, burritos, tacos y más.',$10.50, 4),
+	(5,'Comida típica peruana', 'Las comidas tipicas de Perú las encontraras aquí', $14, 5),
+	(6, 'Helado gourmet', 'Encontraras una gran variedad de helados gourmet aquí, en Heladinis', $70, 6),
+	(7,'Hamburguesa', 'Te ofrecemos todo tipo de comidas rápidas, desde papas fritas, hasta las mejores hamburguesas que vas a probar', $110, 7);
+
+GO
+
+INSERT INTO Clientes(Id_Cliente, Nombre, Direccion, Ciudad, Pais, Telefono, Correo_electronico)
+VALUES
+	(1, 'Juan Perez', '123 Av Chili', 'Guadalajara', 'Mexico', '555-123-4567', 'juan.perez@jotmeil.com'),
+	(2, 'Josefina Lopez', '483 China street', 'Shanghái', 'China', '555-123-4567', 'josefina.lpz@jotmeil.com'),
+	(3, 'Jordi Iguain', '333 Av Victor Mbappe', 'Paris', 'Francia', '555-123-4567', 'jordi.wilder@jotmeil.com'),
+	(4, 'Manuela Manco', '666 Via del corso', 'Roma', 'Italia', '555-123-4567', 'Manola.Manco@jotmeil.com'),
+	(5, 'Daniel Olarte', '111 Av siempre viva', 'Miami', 'Estados Unidos', '555-123-4567', 'Daniel.ola@jotmeil.com');
+
+GO
+
+INSERT INTO Pedidos(Id_Pedido, Fecha, Hora, Tipo, Estado, Precio_t, Id_Restaurante, Id_Cliente )
+VALUES
+	(1, '2024-04-02', '08:48:48', 'Entrega a domicilio', 'Enviado', $300, 1, 1),
+	(2, '2024-04-02', '07:00:36', 'Para llevar', 'En preparación', $120, 2, 2),
+	(3, '2024-04-04', '05:10:00', 'Para llevar', 'Entregado', $12, 3, 3),
+	(4, '2024-04-06', '09:25:00', 'Entrega a domicilio', 'Entregado', $20, 4, 4),
+	(5, '2024-04-06', '06:38:00', 'Para llevar', 'En preparación', $19, 5, 5);
+GO
+
+
+INSERT INTO Reservaciones(Id_Reservacion, Fecha, Hora, Numero_Personas, Id_Restaurante, Id_Cliente)
+VALUES
+	(1, '2024-05-02', '07:30:00', 2, 1, 1),
+	(2, '2024-04-02', '08:00:00', 6, 2, 2),
+	(3, '2024-05-04', '04:00:00', 4, 3, 3),
+	(4, '2024-04-0', '05:40:00', 2, 4, 4),
+	(5, '2024-04-06', '03:00:00', 3, 5, 5);
+GO
+
+--1. ¿Cuál restaurante ofrece cocina italiana? 
+SELECT Restaurante.Nombre
+FROM Restaurante Restaurante
+JOIN Menus Menus ON Restaurante.Id_Restaurante = Menus.Id_Restaurante
+JOIN Cocina Cocina ON Menus.Id_Cocina = Cocina.Id_Cocina
+WHERE Cocina.Nombre = 'Cocina Italiana';
+
+--2. Muestrame todos los restaurantes con su respectiva información (Dirección, país, etc).
+SELECT * 
+FROM Restaurante;
+
+--3. Muestrame un plato de un restaurante en especial.
+SELECT * 
+FROM Comidas 
+WHERE Id_Menu = 1;
+
+--4. Obtener todos los pedidos realizados en una fecha específica
+SELECT * FROM Pedidos WHERE Fecha = '2024-04-03';
+
+--5. ¿Cuántos clientes han hecho pedidos para llevar?
+SELECT COUNT(DISTINCT P.Id_Cliente) AS Numero_de_Clientes
+FROM Pedidos P
+WHERE P.Tipo = 'Para llevar';
+
+--6. ¿Cuántos pedidos se han realizado en cada país?
+SELECT Restaurante.Pais, COUNT(P.Id_Pedido) AS Num_Pedidos
+FROM Restaurante Restaurante
+JOIN Pedidos P ON Restaurante.Id_Restaurante = P.Id_Restaurante
+GROUP BY Restaurante.Pais;
+
+--7. ¿Cuál es el horario de apertura y cierre de cada restaurante?
+SELECT Nombre, Horario_apertura, Horario_cierran
+FROM Restaurante;
+
+--8. ¿Cuál es el plato más caro y el más barato en cada restaurante?
+SELECT Restaurante.Nombre, MAX(Comidas.Precio) AS Plato_Caro, MIN(Comidas.Precio) AS Plato_Barato
+FROM Restaurante Restaurante
+JOIN Menus Menus ON Restaurante.Id_Restaurante = Menus.Id_Restaurante
+JOIN Comidas Comidas ON Menus.Id_Menu = Comidas.Id_Menu
+GROUP BY Restaurante.Nombre;
+
+--9. ¿Cuántos pedidos se han entregado y cuántos están en preparación?
+
+SELECT Estado, COUNT(Id_Pedido) AS Numero_Pedidos
+FROM Pedidos
+WHERE Estado IN ('Entregado', 'En preparación', 'Enviado')
+GROUP BY Estado;
+
+--10. Muestra la información de los restaurantes, sus menús y platos, los pedidos realizados y las reservas realizadas por los clientes. 
+
+	-- Info de los restaurantes
+SELECT 
+    R.Nombre AS 'Nombre del Restaurante',
+    R.Direccion AS 'Dirección del Restaurante',
+    R.Pais AS 'País del Restaurante',
+    R.Ciudad AS 'Ciudad del Restaurante',
+    R.Telefono AS 'Teléfono del Restaurante',
+    R.Horario_apertura AS 'Hora de Apertura',
+    R.Horario_cierran AS 'Hora de Cierre',
+    C.Nombre AS 'Nombre de la Cocina',
+    C.Descripción AS 'Descripción de la Cocina'
+FROM
+    Restaurante R
+JOIN 
+    Menus M ON R.Id_Restaurante = M.Id_Restaurante
+JOIN 
+    Cocina C ON M.Id_Cocina = C.Id_Cocina;
+
+-- Info de los menús
+SELECT
+    M.Id_Menu AS 'ID del Menú',
+    Co.Nombre AS 'Nombre del Plato',
+    Co.Descripción AS 'Descripción del Plato',
+    Co.Precio AS 'Precio del Plato'
+FROM
+    Menus M
+JOIN
+    Comidas Co ON M.Id_Menu = Co.Id_Menu;
+
+-- Info de los clientes
+SELECT
+    Cl.Nombre AS 'Nombre del Cliente',
+    Cl.Direccion AS 'Dirección del Cliente',
+    Cl.Ciudad AS 'Ciudad del Cliente',
+    Cl.Pais AS 'País del Cliente',
+    Cl.Telefono AS 'Teléfono del Cliente',
+    Cl.Correo_electronico AS 'Correo Electrónico del Cliente'
+FROM
+    Clientes Cl;
+
+-- Info de los pedidos
+SELECT
+    R.Nombre AS 'Nombre del Restaurante',
+    Cl.Nombre AS 'Nombre del Cliente',
+    P.Fecha AS 'Fecha del Pedido',
+    P.Hora AS 'Hora del Pedido',
+    P.Tipo AS 'Tipo de Pedido',
+    P.Estado AS 'Estado del Pedido',
+    P.Precio_t AS 'Precio Total del Pedido'
+FROM
+    Pedidos P
+JOIN
+    Restaurante R ON P.Id_Restaurante = R.Id_Restaurante
+JOIN
+    Clientes Cl ON P.Id_Cliente = Cl.Id_Cliente;
+
+-- Info de las reservaciones
+SELECT
+    R.Nombre AS 'Nombre del Restaurante',
+    Cl.Nombre AS 'Nombre del Cliente',
+    Re.Fecha AS 'Fecha de Reserva',
+    Re.Hora AS 'Hora de Reserva',
+    Re.Numero_Personas AS 'Número de Personas en la Reserva'
+FROM
+    Reservaciones Re
+JOIN
+    Restaurante R ON Re.Id_Restaurante = R.Id_Restaurante
+JOIN
+    Clientes Cl ON Re.Id_Cliente = Cl.Id_Cliente;

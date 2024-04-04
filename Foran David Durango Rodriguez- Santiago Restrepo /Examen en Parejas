@@ -1,0 +1,203 @@
+USE Administrador
+
+CREATE TABLE Restaurantes (
+    Id_Restaurante INT PRIMARY KEY,
+    Nombre VARCHAR(100),
+    Dirección VARCHAR(50),
+    Ciudad VARCHAR(50),
+    País VARCHAR(50),
+    Teléfono VARCHAR(15),
+    Horario_apertura TIME,
+    Horario_cierre TIME,
+    Imagen BIT
+);
+
+CREATE TABLE Cocinas (
+    Id_Cocina INT PRIMARY KEY,
+    Nombre VARCHAR(50),
+    Descripción VARCHAR(200) 
+);
+
+CREATE TABLE Menús (
+    Id_Menu INT PRIMARY KEY,
+    Id_Restaurante INT,
+    Id_Cocina INT,
+    FOREIGN KEY (Id_Restaurante) REFERENCES Restaurantes(Id_Restaurante),
+    FOREIGN KEY (Id_Cocina) REFERENCES Cocinas(Id_Cocina)
+);
+
+CREATE TABLE Platos (
+    Id_Plato INT PRIMARY KEY,
+    Nombre VARCHAR(50),
+    Descripción VARCHAR(200),
+    Precio DECIMAL(10,2),
+    Id_Menu INT,
+    FOREIGN KEY (Id_Menu) REFERENCES Menús(Id_Menu)
+);
+
+CREATE TABLE Clientes (
+    Id_Cliente INT PRIMARY KEY,
+    Nombre VARCHAR(50),
+    Dirección VARCHAR(50),
+    Ciudad VARCHAR(50),
+    País VARCHAR(50),
+    Teléfono VARCHAR(15),
+    Correo_electrónico VARCHAR(100)
+);
+
+CREATE TABLE Pedidos (
+    Id_Pedido INT PRIMARY KEY,
+    Fecha DATE,
+    Hora TIME,
+    Tipo VARCHAR(50),
+    Estado VARCHAR(50),
+    Precio_Total DECIMAL(10,2),
+    Id_Restaurante INT,
+    Id_Cliente INT,
+    FOREIGN KEY (Id_Restaurante) REFERENCES Restaurantes(Id_Restaurante),
+    FOREIGN KEY (Id_Cliente) REFERENCES Clientes(Id_Cliente)
+);
+
+CREATE TABLE Reservas (
+    Id_reserva INT PRIMARY KEY,
+    Fecha DATE,
+    Hora TIME,
+    Número_Personas INT,
+    Id_Restaurante INT,
+    Id_Cliente INT,
+    FOREIGN KEY (Id_Restaurante) REFERENCES Restaurantes(id_Restaurante),
+    FOREIGN KEY (Id_Cliente) REFERENCES Clientes(Id_Cliente)
+);
+CREATE TABLE Ventas(
+	Id_venta INT PRIMARY KEY,
+	Id_Plato INT,
+	Fecha DATE,
+	Cantidad INT,
+	FOREIGN KEY (Id_Plato)REFERENCES Platos (Id_Plato)
+);
+
+
+
+-- Insertar datos en la tabla Restaurantes
+INSERT INTO Restaurantes (Id_Restaurante, Nombre, Dirección, Ciudad, País, Teléfono, Horario_apertura, Horario_cierre, Imagen)
+VALUES (1, 'Don Juan ', 'Calle  123', 'Bogotá', 'Colombia', '3204767533', '08:00:00', '22:00:00', 0),
+       (2, 'Don Pedro', 'Calle 14', 'Bogotá', 'Colombia', '3204576854', '08:00:00', '17:00:00', 0),
+	   (3, 'Hacinto', 'Calle 70', 'Medellín', 'Colombia', '3794767533', '08:00:00', '23:00:00', 0),
+	   (4, 'Santorini ', 'Cra 65', 'Medellín', 'Colombia', '3205677533', '10:00:00', '23:00:00', 0),
+	   (5, 'Versalles ', 'Calle 50', 'Medellín', 'Colombia', '3404767773', '06:00:00', '02:00:00', 0),
+	   (6, 'Astor ', 'Calle 50', 'Cali', 'Colombia', '3206753357', '09:00:00', '14:00:00', 0),
+	   (7, 'Casticombo ', 'Calle 68', 'Medellín', 'Colombia', '3356767533', '11:00:00', '23:00:00', 0);
+	  
+       
+
+
+-- Insertar datos en la tabla Cocinas
+INSERT INTO Cocinas (Id_Cocina, Nombre, Descripción)
+VALUES (1, 'Cocina Italiana', 'Especialidades italianas caseras'),
+       (2, 'Cocina Colombiana', 'Especialidades en carne y empanadas caseras'),
+	   (3, 'Cocina Paisa', 'Especialidades en comida tipica de varias regiones del pais '),
+	   (4, 'Cocina Argentina', 'Especialidades buffet sobre la comida tipica de ese pais'),
+	   (5, 'Cocina Polaca', 'Especialidades en pastas, queso y carne '),
+	   (6, 'Cocina Chilena', 'Especialidades en vinos con salsa para carne'),
+	   (7, 'Cocina española', 'Especialidades en pollo frito con la mejor sasón');
+
+
+
+-- Insertar datos en la tabla Menús
+INSERT INTO Menús (Id_Menu, Id_Restaurante, Id_Cocina)
+VALUES (1, 1, 1),
+       (2, 2, 2),
+	   (3, 3, 3),
+	   (4, 4, 4),
+	   (5, 5, 5),
+	   (6, 6, 6),
+	   (7, 7, 7);
+
+
+
+
+-- Insertar datos en la tabla Platos
+INSERT INTO Platos (Id_Plato, Nombre, Descripción, Precio, Id_Menu)
+VALUES (1, 'Pizza Margherita', 'Tomate, mozzarella y albahaca', 12.99, 1),
+       (2, 'Badeja paisa', 'con carne, arroz, arepa, patacon y aguacate', 15.99, 1),
+	   (3, 'Lechona ', 'Carne de cerdo bañada en verduras', 18.99, 1),
+	   (4, 'Carne envinada ', 'Carne bañada de vino argenitino y chileno', 22.99, 1),
+	   (5, 'Empanadas', 'Deliciosas empanadas horneadas con pollo, carne y verduras', 25.99, 1),
+	   (6, 'Pasteleria', 'Deliciosos postres con salsas inglesa y arequipe ', 11.99, 1),
+	   (7, 'Pollo', 'Pollo frito con papas a la francesa ', 10.99, 1);
+
+
+-- Insertar datos en la tabla Clientes
+INSERT INTO Clientes (Id_Cliente, Nombre, Dirección, Ciudad, País, Teléfono, Correo_electrónico)
+VALUES (1, 'Juan Pérez', 'Calle 159', 'Cali', 'Colombia', '3482956036', 'juan@example.com'),
+       (2, 'Jaime Muñoz', 'Calle 13', 'Bogotá', 'Colombia', '3456884562', 'jaime@example.com'),
+	   (3, 'Sebastian Restrepo', 'Carrera 67', 'Medellín', 'Colombia', '345698547', 'sebastian@example.com'),
+	   (4,  'Juan Jose',  'Calle 50 ', 'Medellín ', 'Colombia', '3452758495', 'Juanjose@example.com'),
+	   (5, 'David Paneso', 'Calle 78', 'Bogotá', 'Colombia', '3254638461', 'David@example.com'),
+	   (6, 'Marina', 'Calle 13', 'Bogotá', 'Colombia', '3728453617', 'Marina@example.com'),
+	   (7, 'Karly', 'Carrera 80', 'Cali', 'Colombia', '3241647385', 'karly@example.com');
+
+-- Insertar datos en la tabla Pedidos
+INSERT INTO Pedidos (Id_Pedido, Fecha, Hora, Tipo, Estado, Precio_Total, Id_Restaurante, Id_Cliente)
+VALUES (1, '2024-04-03', '14:30:00', 'Domicilio', 'En proceso', 45.99, 1, 1),
+       (2, '2024-04-03','12:30:00','Domicilio','En proceso', 50.00, 2, 3),
+	   (3, '2024-04-04','14:30:00','Domicilio','En proceso', 40.00, 6, 2),
+	   (4, '2024-04-05','10:30:00','Domicilio','En proceso', 60.00, 5, 7),
+	   (5, '2024-04-01','11:30:00','Domicilio','En proceso', 70.00, 7, 4),
+	   (6, '2024-04-03','09:30:00','Domicilio','En proceso', 30.00, 3, 6),
+	   (7, '2024-04-07','08:30:00','Domicilio','En proceso', 80.00, 4, 5);
+	   
+-- Insertar datos en la tabla Reservas
+INSERT INTO Reservas (Id_reserva, Fecha, Hora, Número_Personas, Id_Restaurante, Id_Cliente)
+VALUES  (1, '2024-04-05', '19:00:00', 4, 2, 3),
+	    (2, '2024-04-01', '16:00:00', 5, 3, 5),
+	    (3, '2024-04-02', '18:00:00', 3, 5, 6),
+    	(4, '2024-04-03', '19:00:00', 6, 2, 7),
+		(5, '2024-04-04', '13:00:00', 7, 7, 4),
+		(6, '2024-04-07', '22:00:00', 1, 2, 2),
+		(7, '2024-04-06', '12:00:00', 2, 4, 1);
+
+
+INSERT INTO Ventas (Id_venta,Id_Plato, Fecha, Cantidad)
+VALUES	(1, 2, '2024-06-07', 10),
+		(2, 3, '2024-07-03', 11),
+		(3, 4, '2024-01-02', 3),
+		(4, 5, '2024-06-03', 13),
+		(5, 6, '2024-04-05', 4),
+		(6, 7, '2024-10-08', 40),
+		(7, 1, '2024-09-09', 50);
+
+
+
+
+SELECT Restaurantes.Nombre FROM Restaurantes Restaurantes JOIN Menús Menús ON Restaurantes.Id_Restaurante
+
+= Menús.Id_Restaurante JOIN Cocinas ON Menús.Id_Cocina = Cocinas.Id_Cocina
+WHERE Cocinas.Nombre = 'Cocina italiana'
+
+SELECT Restaurantes.Nombre AS 'Nombre del Restaurante', Platos.Nombre AS 'Nombre del Plato', SUM(Ventas.Cantidad) AS 'Cantidad Vendida'
+FROM Ventas Ventas
+JOIN Platos Platos ON Ventas.Id_Plato = Platos.Id_Plato
+JOIN Menús Menús ON Platos.Id_Menu = Menús.Id_Menu
+JOIN Restaurantes Restaurantes ON Menús.Id_Restaurante = Restaurantes.Id_Restaurante
+GROUP BY Restaurantes.Nombre, Platos.Nombre
+ORDER BY SUM(Ventas.Cantidad) DESC;
+
+
+SELECT *
+FROM Pedidos
+WHERE Id_Restaurante = 7;
+
+SELECT Re.Id_reserva, Re.Fecha, Re.Hora, Re.Número_Personas, R.Nombre AS 'Nombre del Restaurante', Cl.Nombre AS 'Nombre del Cliente'
+FROM Reservas Re
+JOIN Restaurantes R ON Re.Id_Restaurante = R.Id_Restaurante
+JOIN Clientes Cl ON Re.Id_Cliente = Cl.Id_Cliente;
+
+
+SELECT Restaurantes.Id_reserva, Restaurantes.Fecha, Restaurantes.Hora, Restaurantes.Número_Personas, R.Nombre AS 'Nombre del Restaurantes', Cl.Nombre AS 'Nombre del Cliente'
+FROM Reservas Restaurantes
+JOIN Restaurantes R ON Restaurantes.Id_Restaurante = R.Id_Restaurante
+JOIN Clientes Cl ON Restaurantes.Id_Cliente = Cl.Id_Cliente;
+
+
+

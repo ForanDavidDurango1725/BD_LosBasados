@@ -166,37 +166,36 @@ GO
 
 ---Procedimiento almacenado para actualizar un Usuario
 ALTER PROCEDURE USP_ACTUALIZAR_USUARIO
-		@IdUsuario INT,
-		@Documento VARCHAR (50),
-		@NombreCompleto VARCHAR(100),
-		@Correo VARCHAR (100),
-		@Clave VARCHAR (100),
-		@IdRol INT,
-		@Estado BIT,
-		@Respuesta BIT OUTPUT,
-		@Mensaje VARCHAR(500) OUTPUT
-
+    @IdUsuario INT,
+    @Documento VARCHAR(50),
+    @NombreCompleto VARCHAR(100),
+    @Correo VARCHAR(100),
+    @Clave VARCHAR(100),
+    @IdRol INT,
+    @Estado BIT,
+    @Respuesta BIT OUTPUT,
+    @Mensaje VARCHAR(500) OUTPUT
 AS
 BEGIN 
-	SET @Respuesta = 0
-	SET @Mensaje = ''
+    SET @Respuesta = 0
+    SET @Mensaje = ''
 
-	IF NOT EXISTS (SELECT * FROM USUARIO WHERE Documento = @Documento AND IdUsuario != @IdUsuario)
-		BEGIN
-			UPDATE USUARIO SET
-			Documento = @Documento,
-			NombreCompleto = @NombreCompleto ,
-			Correo = @Correo,
-			Clave = @Clave,
-			IdRol = @IdRol,
-			Estado = @Estado
+    -- Verificar si existe otro usuario con el mismo documento, pero que no sea el usuario que se está actualizando
+    IF NOT EXISTS (SELECT * FROM USUARIO WHERE Documento = @Documento AND IdUsuario <> @IdUsuario)
+    BEGIN
+        UPDATE USUARIO SET
+        Documento = @Documento,
+        NombreCompleto = @NombreCompleto,
+        Correo = @Correo,
+        Clave = @Clave,
+        IdRol = @IdRol,
+        Estado = @Estado
+        WHERE IdUsuario = @IdUsuario
 
-			WHERE IdUsuario = @IdUsuario
-
-			SET @Respuesta = 1
-		END
-	ELSE 
-		SET @Mensaje = 'No se puede repetir el documento para más de un usuario'
+        SET @Respuesta = 1
+    END
+    ELSE 
+        SET @Mensaje = 'No se puede repetir el documento para más de un usuario'
 END
 GO
 
@@ -772,3 +771,12 @@ BEGIN
 END
 GO
 
+SELECT * FROM USUARIO
+
+SELECT * FROM PRODUCTO
+
+DBCC CHECKIDENT ('PRODUCTO')
+
+DBCC CHECKIDENT ('DETALLE_VENTA')
+
+DBCC CHECKIDENT ('DETALLE_COM')
